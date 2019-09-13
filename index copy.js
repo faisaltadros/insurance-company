@@ -5,16 +5,14 @@ const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const auth = require("./middleware/auth");
 
-const { check } = require("express-validator");
+const { check, validationResult } = require("express-validator");
+
+const User = require("./models/User");
+const Policy = require("./models/Policy");
 
 var jsonParser = bodyParser.json();
 
-// To start the API in the terminal:
-// npm install
 // npm run server
-
-// POST ROUTE TO GET TOKEN
-// =======================
 
 // @route       POST /
 // @desc        Get token for admin account
@@ -70,8 +68,24 @@ app.post(
   }
 );
 
-// CLIENT ROUTES
-// ==============
+// @route       GET /users
+// @desc        Get all users
+// @access      Public
+app.get("/users", function(req, res) {
+  request("http://www.mocky.io/V2/5808862710000087232b75ac", function(
+    error,
+    response,
+    body
+  ) {
+    if (!error && response.statusCode == 200) {
+      const usersJSON = JSON.parse(body);
+      // console.log(usersJSON);
+      res.send(usersJSON);
+    } else {
+      console.log("Error parsing JSON");
+    }
+  });
+});
 
 // @route       GET /users/id/:user_id
 // @desc        Get user by user_id
@@ -145,29 +159,35 @@ app.get("/users/policy/:policy_id", auth, async (req, res) => {
     async (error, response, body) => {
       if (!error && response.statusCode == 200) {
         const policiesJSON = JSON.parse(body);
+        var returnData = [];
+
         try {
           for (var i = 0; i < policiesJSON.policies.length; i++) {
             if (policiesJSON.policies[i].id == req.params.policy_id) {
               const policyId = policiesJSON.policies[i].clientId;
-              var userId = "";
+
               request(
                 "http://www.mocky.io/V2/5808862710000087232b75ac",
                 async (error, response, body) => {
                   const usersJSON = JSON.parse(body);
                   for (var j = 0; j < usersJSON.clients.length; j++) {
-                    userId = usersJSON.clients[j].id;
+                    const userId = usersJSON.clients[j].id;
                     if (policyId === userId) {
-                      res.send(usersJSON.clients[j]);
-                      break;
+                      returnData.push(usersJSON.clients[j]);
+                      res.send(returnData);
                     }
+                  }
+                  if (returnData.length < 1) {
+                    returnData.push("No user found for this policy");
+                    res.send(returnData);
                   }
                 }
               );
-              break;
-            } else {
-              res.send("policy not found");
             }
-            break;
+            if (returnData.length < 1) {
+              returnData.push("Invalid policy ID");
+              res.send(returnData);
+            }
           }
         } catch (err) {
           console.error(err.message);
@@ -184,8 +204,24 @@ app.get("/users/policy/:policy_id", auth, async (req, res) => {
   );
 });
 
-// POLICIES ROUTES
-// ===============
+// @route       GET /policies
+// @desc        Get all policies
+// @access      Public
+app.get("/policies", function(req, res) {
+  request("http://www.mocky.io/v2/580891a4100000e8242b75c5", function(
+    error,
+    response,
+    body
+  ) {
+    if (!error && response.statusCode == 200) {
+      const policiesJSON = JSON.parse(body);
+      // console.log(policiesJSON);
+      res.send(policiesJSON);
+    } else {
+      console.log("Error parsing JSON");
+    }
+  });
+});
 
 // @route       GET /policies/user/:user_name
 // @desc        Get policies by user_name
@@ -216,15 +252,16 @@ app.get("/policies/user/:user_name", auth, async (req, res) => {
                       policiesArray.push(policiesJSON.policies[j]);
                     }
                   }
-
                   if (policiesArray.length < 1) {
                     policiesArray = ["No policies for this username"];
                   }
-                  res.send(policiesArray);
                 }
               );
+            } else {
+              policiesArray = ["No policies"];
             }
           }
+          res.send(policiesArray);
         } catch (err) {
           console.error(err.message);
           if (err.kind == "ObjectId") {
