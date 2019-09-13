@@ -7,7 +7,7 @@ npm run server
 
 ## To Test in Postman
 
-POST ROUTE TO GET TOKEN
+	POST ROUTE TO GET TOKEN
 
 - route       POST /
 - desc        Get token for admin account
