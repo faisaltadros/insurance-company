@@ -53,3 +53,15 @@ GET Request to "/users/policy/:policy_id"
 
 GET Request to "/policies/user/:user_name"
   Add "x-auth-token" Header with the token as a value
+  
+  
+  	Decisions
+	
+Most of my experience with backend involved using a database such as MongoDB, although when I was given the data in json format I was not clear on what was needed for the API. I made the decision to parse the JSON and use that as the database and not save it into a database of its own. I made chose this mainly because I had no experience in doing so and I took it as a challenge to build something different. 
+
+Although, I believe using a database would give me more control over the data and if I was asked to add more route (Post, Put or Delete) I would use one.
+
+If you would like to see some of my other code where I built a more extensive backend with full RESTful routes, you can visit these repositories:
+
+https://github.com/faisaltadros/realed
+https://github.com/faisaltadros/dev-connector
