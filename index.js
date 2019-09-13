@@ -103,7 +103,7 @@ app.get("/users/id/:user_id", async (req, res) => {
   );
 });
 
-// @route       GET /users/username/:user_id
+// @route       GET /users/username/:user_name
 // @desc        Get user by user_name
 // @access      Public
 app.get("/users/username/:user_name", async (req, res) => {
