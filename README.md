@@ -63,5 +63,5 @@ Although, I believe using a database would give me more control over the data an
 
 If you would like to see some of my other code where I built a more extensive backend with full RESTful routes, you can visit these repositories:
 
-https://github.com/faisaltadros/realed
-https://github.com/faisaltadros/dev-connector
+- https://github.com/faisaltadros/realed
+- https://github.com/faisaltadros/dev-connector
