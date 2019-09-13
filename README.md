@@ -25,15 +25,15 @@ this will return a token (if the user is an admin)
 
 	CLIENT ROUTES
 
-@route       GET /users/id/:user_id
-@desc        Get user by user_id
-@access      Public
+- @route       GET /users/id/:user_id
+- @desc        Get user by user_id
+- @access      Public
 
 GET Request to "/users/id/:user_id"
 
-@route       GET /users/username/:user_name
-@desc        Get user by user_name
-@access      Public
+- @route       GET /users/username/:user_name
+- @desc        Get user by user_name
+- @access      Public
 
 GET Request to "/users/username/:user_name"
 
